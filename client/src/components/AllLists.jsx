@@ -12,6 +12,7 @@ class AllLists extends React.Component {
         {this.props.lists.map(list =>
           <List
             list={list}
+            deleteList={this.props.deleteList}
             key={list._id}
           />)}
       </div>

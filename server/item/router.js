@@ -10,6 +10,7 @@ itemRouter.route('/one/:id')
 
 // '/many' routes
 itemRouter.route('/many/:id')
-  .get(controller.getMany); // need list id
+  .get(controller.getMany) // need list id
+  .delete(controller.removeMany); // need list id
 
 module.exports = itemRouter;

@@ -73,7 +73,11 @@ class List extends React.Component {
     if (e.target.tagName === 'BUTTON') {
       this.addItem();
     } else if (e.target.tagName === 'I') {
-      this.deleteItem(e.target.dataset.id);
+      if (e.target.parentElement.tagName === 'H3') {
+        this.props.deleteList(this.props.list._id)
+      } else {
+        this.deleteItem(e.target.dataset.id);
+      }
     }
 
   }
@@ -99,7 +103,7 @@ class List extends React.Component {
           onChange={this.handleTextareaChange}
         ></textarea>
         <button>Add</button>
-        <h3>{this.props.list.name}</h3>
+        <h3>{this.props.list.name} <i className="far fa-minus-square" data-id={this.props.list._id}></i></h3>
         <p>{this.props.list.description}</p>
         {this.state.items.map(item =>
           <ListItem
