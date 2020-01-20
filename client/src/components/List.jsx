@@ -8,13 +8,19 @@ class List extends React.Component {
       items: [],
       name: '',
       notes: '',
-      editMode: false
+      listEditMode: false,
+      itemEditMode: false,
+      editItemName: '',
+      editItemNotes: ''
     };
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleTextareaChange = this.handleTextareaChange.bind(this);
     this.handleEnter = this.handleEnter.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.handleConfirmListEdit = this.handleConfirmListEdit.bind(this);
+    this.handleItemNameChange = this.handleItemNameChange.bind(this);
+    this.handleItemNotesChange = this.handleItemNotesChange.bind(this);
+    this.handleConfirmItemEdit = this.handleConfirmItemEdit.bind(this);
   }
 
   componentDidMount() {
@@ -81,7 +87,7 @@ class List extends React.Component {
         if (e.target.classList.contains('fa-minus-square')) { // if delete
           this.props.deleteList(this.props.list._id);
         } else if (e.target.classList.contains('fa-pen-square')) { // if edit
-          this.setState({editMode: true});
+          this.setState({listEditMode: true});
           this.props.editList(this.props.list._id);
         }
 
@@ -89,21 +95,61 @@ class List extends React.Component {
         if (e.target.classList.contains('fa-minus-square')) {
           this.deleteItem(e.target.dataset.id);
         } else if (e.target.classList.contains('fa-pen-square')) {
-          console.log('trying to edit todo item') // remember to setState to editMode: true
+          let filtered = this.state.items.filter(el => el._id === e.target.dataset.id);
+          this.setState({itemEditMode: e.target.dataset.id, editItemName: filtered[0].name, editItemNotes: filtered[0].notes});
         }
       }
     }
   }
 
   handleConfirmListEdit() {
-    this.setState({editMode: false});
+    this.setState({listEditMode: false});
     this.props.updateList(this.props.list._id);
   }
+
+  handleItemNameChange(e) {
+    this.setState({editItemName: e.target.value});
+  }
+
+  handleItemNotesChange(e) {
+    this.setState({editItemNotes: e.target.value});
+  }
+
+  handleConfirmItemEdit() {
+    let id = this.state.itemEditMode;
+
+    fetch(`http://127.0.0.1:4321/item/one/${id}`,
+      {
+        method: 'PUT',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({
+          "name": this.state.editItemName,
+          "notes": this.state.editItemNotes})
+      }
+    )
+      .then(data => data.json())
+      .then(data => {
+        this.setState(prevState => {
+          let i = prevState.items.findIndex(el => el._id === id);
+          prevState.items.splice(i, 1, data);
+          return {
+            items: prevState.items,
+            itemEditMode: false,
+            editItemName: '',
+            editItemNotes: ''
+          }
+        });
+      })
+      .catch(err => console.log('error at List.jsx handleConfirmItemEdit', err));
+  }
+
+
+
 
   render() {
     return (
       <div
-        onClick={this.state.editMode ? null : this.handleClick}
+        onClick={this.state.listEditMode || this.state.itemEditMode ? null : this.handleClick}
         className='List'
         id={this.props.list._id}
       >
@@ -123,7 +169,7 @@ class List extends React.Component {
         <button>Add</button>
 
 
-        {this.state.editMode ?
+        {this.state.listEditMode ?
           <input
             type="text"
             value={this.props.editListName}
@@ -131,11 +177,11 @@ class List extends React.Component {
           /> :
           <h3>{this.props.list.name}
             <i className="fas fa-pen-square"></i>
-            <i className="fas fa-minus-square" data-id={this.props.list._id}></i>
+            <i className="fas fa-minus-square"></i>
           </h3>
         }
 
-        {this.state.editMode ?
+        {this.state.listEditMode ?
           <input
             value={this.props.editListDescription}
             onChange={this.props.listDescriptionOnChange}
@@ -143,7 +189,7 @@ class List extends React.Component {
           <p>{this.props.list.description}</p>
         }
 
-        {this.state.editMode ?
+        {this.state.listEditMode ?
           <button
             onClick={this.handleConfirmListEdit}
           >Confirm</button> :
@@ -154,6 +200,12 @@ class List extends React.Component {
         {this.state.items.map(item =>
           <ListItem
             item={item}
+            itemEditMode={this.state.itemEditMode}
+            editItemName={this.state.editItemName}
+            handleItemNameChange={this.handleItemNameChange}
+            editItemNotes={this.state.editItemNotes}
+            handleItemNotesChange={this.handleItemNotesChange}
+            handleConfirmItemEdit={this.handleConfirmItemEdit}
             key={item._id}
           />
         )}

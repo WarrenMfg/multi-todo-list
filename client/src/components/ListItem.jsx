@@ -8,13 +8,37 @@ class ListItem extends React.Component {
   render() {
     return (
       <div id={this.props.item._id}>
-        <p>{this.props.item.name}
-          <span>{this.props.item.status}</span>
-          <span>{this.props.item.due}</span>
-          <i className="fas fa-pen-square"></i>
-          <i className="fas fa-minus-square" data-id={this.props.item._id}></i>
-        </p>
-        <p>{this.props.item.notes}</p>
+
+        {this.props.itemEditMode === this.props.item._id ?
+          <input
+            type="text"
+            value={this.props.editItemName}
+            onChange={this.props.handleItemNameChange}
+          /> :
+          <p>{this.props.item.name}
+            <i className="fas fa-pen-square" data-id={this.props.item._id}></i>
+            <i className="fas fa-minus-square" data-id={this.props.item._id}></i>
+          </p>
+        }
+
+
+        {this.props.itemEditMode === this.props.item._id ?
+          <textarea
+            type="text"
+            value={this.props.editItemNotes}
+            onChange={this.props.handleItemNotesChange}
+          ></textarea> :
+          <p>{this.props.item.notes}</p>
+        }
+
+
+        {this.props.itemEditMode === this.props.item._id ?
+          <button
+            onClick={this.props.handleConfirmItemEdit}
+          >Confirm</button> :
+          null
+        }
+
       </div>
     );
   }
