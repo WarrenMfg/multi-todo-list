@@ -2,9 +2,10 @@
 // const Promise = require('bluebird');
 // Promise.promisifyAll(mongoose);
 
-
+// GOOD
 const getOne = model => (req, res) => {
-  return model.findOne({ createdBy: req.user._id, _id: req.params.id }).lean().exec()
+  console.log(req.params);
+  return model.findOne({ _id: req.params.id }).lean().exec()
     .then(doc => res.send({ data: doc }))
     .catch(err => {
       console.log('error at crud.js getOne', err);
@@ -12,15 +13,29 @@ const getOne = model => (req, res) => {
     });
 };
 
+// GOOD
+// getMany lists: need no id
+// getMany items: need list id
 const getMany = model => (req, res) => {
-  return model.find({ createdBy: req.user._id }).lean().exec()
-    .then(docs => res.send({ data: docs }))
-    .catch(err => {
-      console.log('error at crud.js getMany', err);
-      res.send(400);
-    });
+  if (req.params.id === 'all') {
+    return model.find({}).lean().exec()
+      .then(docs => res.send({ data: docs }))
+      .catch(err => {
+        console.log('error at crud.js getMany', err);
+        res.send(400);
+      });
+  } else {
+    return model.find({list: req.params.id}).lean().exec()
+      .then(docs => res.send({ data: docs }))
+      .catch(err => {
+        console.log('error at crud.js getMany', err);
+        res.send(400);
+      });
+  }
 };
 
+
+// GOOD
 const createOne = model => (req, res) => {
   return model.create(req.body)
     .then(doc => res.send({ data: doc }))
@@ -30,10 +45,9 @@ const createOne = model => (req, res) => {
     });
 };
 
+// GOOD
 const updateOne = model => (req, res) => {
-  return model.findOneAndUpdate(
-    { createdBy: req.user._id,  _id: req.params.id }, req.body, { new: true }
-  ).lean().exec()
+  return model.findOneAndUpdate({ _id: req.params.id }, req.body, { new: true } ).lean().exec()
     .then(updatedDoc => res.send({ data: updatedDoc }))
     .catch(err => {
       console.log('error at crud.js', err);
@@ -41,10 +55,9 @@ const updateOne = model => (req, res) => {
     });
 };
 
+// WORKING
 const removeOne = model => (req, res) => {
-  return model.findOneAndRemove(
-    { createdBy: req.user._id, _id: req.params.id }
-  )
+  return model.findOneAndRemove({ _id: req.params.id })
     .then(removed => res.send({ data: removed }))
     .catch(err => {
       console.log('error at crud.js removeOne', err);

@@ -1,4 +1,5 @@
 const crudControllers = require('../crud.js');
-const db = require('../../database/index.js');
+const Item = require('./model.js');
+require('../../database/index.js');
 
-module.exports = crudControllers(db.Item);
+module.exports = crudControllers(Item);
