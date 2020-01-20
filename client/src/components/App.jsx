@@ -7,7 +7,6 @@ class App extends React.Component {
     super(props);
     this.state = {
       lists: [],
-      editMode: false,
       editListName: '',
       editListDescription: ''
     };
@@ -16,7 +15,7 @@ class App extends React.Component {
     this.editList = this.editList.bind(this);
     this.listNameOnChange = this.listNameOnChange.bind(this);
     this.listDescriptionOnChange = this.listDescriptionOnChange.bind(this);
-    this.confirmListEdit = this.confirmListEdit.bind(this);
+    this.updateList = this.updateList.bind(this);
   }
 
   componentDidMount() {
@@ -59,8 +58,7 @@ class App extends React.Component {
 
   editList(id) {
     let filtered = this.state.lists.filter(el => el._id === id);
-    console.log(filtered);
-    this.setState({editMode: true, editListName: filtered[0].name, editListDescription: filtered[0].description});
+    this.setState({editListName: filtered[0].name, editListDescription: filtered[0].description});
   }
 
   listNameOnChange(e) {
@@ -70,12 +68,6 @@ class App extends React.Component {
   listDescriptionOnChange(e) {
     this.setState({editListDescription: e.target.value})
   }
-
-  confirmListEdit(id) {
-    this.setState({editMode: false});
-    this.updateList(id);
-  }
-
 
   updateList(id) {
     fetch(`http://127.0.0.1:4321/list/one/${id}`,
@@ -98,18 +90,20 @@ class App extends React.Component {
       .catch(err => console.log('error at App.jsx updateList', err));
   }
 
+
+
+
   render() {
     return (
       <div>
         <Form addList={this.addList} />
         <AllLists
-          editMode={this.state.editMode}
           editListName={this.state.editListName}
           listNameOnChange={this.listNameOnChange}
           editListDescription={this.state.editListDescription}
           listDescriptionOnChange={this.listDescriptionOnChange}
           editList={this.editList}
-          confirmListEdit={this.confirmListEdit}
+          updateList={this.updateList}
           deleteList={this.deleteList}
           lists={this.state.lists}
         />

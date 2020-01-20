@@ -12,13 +12,12 @@ class AllLists extends React.Component {
         {this.props.lists.map(list =>
           <List
             list={list}
-            editMode={this.props.editMode}
             editListName={this.props.editListName}
             listNameOnChange={this.props.listNameOnChange}
             editListDescription={this.props.editListDescription}
             listDescriptionOnChange={this.props.listDescriptionOnChange}
             editList={this.props.editList}
-            confirmListEdit={this.props.confirmListEdit}
+            updateList={this.props.updateList}
             deleteList={this.props.deleteList}
             key={list._id}
           />)}

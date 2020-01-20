@@ -7,7 +7,8 @@ class List extends React.Component {
     this.state = {
       items: [],
       name: '',
-      notes: ''
+      notes: '',
+      editMode: false
     };
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleTextareaChange = this.handleTextareaChange.bind(this);
@@ -80,6 +81,7 @@ class List extends React.Component {
         if (e.target.classList.contains('fa-minus-square')) { // if delete
           this.props.deleteList(this.props.list._id);
         } else if (e.target.classList.contains('fa-pen-square')) { // if edit
+          this.setState({editMode: true});
           this.props.editList(this.props.list._id);
         }
 
@@ -94,13 +96,14 @@ class List extends React.Component {
   }
 
   handleConfirmListEdit() {
-    this.props.confirmListEdit(this.props.list._id);
+    this.setState({editMode: false});
+    this.props.updateList(this.props.list._id);
   }
 
   render() {
     return (
       <div
-        onClick={this.props.editMode ? null : this.handleClick}
+        onClick={this.state.editMode ? null : this.handleClick}
         className='List'
         id={this.props.list._id}
       >
@@ -120,7 +123,7 @@ class List extends React.Component {
         <button>Add</button>
 
 
-        {this.props.editMode ?
+        {this.state.editMode ?
           <input
             type="text"
             value={this.props.editListName}
@@ -132,7 +135,7 @@ class List extends React.Component {
           </h3>
         }
 
-        {this.props.editMode ?
+        {this.state.editMode ?
           <input
             value={this.props.editListDescription}
             onChange={this.props.listDescriptionOnChange}
@@ -140,7 +143,7 @@ class List extends React.Component {
           <p>{this.props.list.description}</p>
         }
 
-        {this.props.editMode ?
+        {this.state.editMode ?
           <button
             onClick={this.handleConfirmListEdit}
           >Confirm</button> :
