@@ -13,6 +13,7 @@ class List extends React.Component {
     this.handleTextareaChange = this.handleTextareaChange.bind(this);
     this.handleEnter = this.handleEnter.bind(this);
     this.handleClick = this.handleClick.bind(this);
+    this.handleConfirmListEdit = this.handleConfirmListEdit.bind(this);
   }
 
   componentDidMount() {
@@ -72,20 +73,34 @@ class List extends React.Component {
   handleClick(e) {
     if (e.target.tagName === 'BUTTON') {
       this.addItem();
+
     } else if (e.target.tagName === 'I') {
+
       if (e.target.parentElement.tagName === 'H3') {
-        this.props.deleteList(this.props.list._id)
-      } else {
-        this.deleteItem(e.target.dataset.id);
+        if (e.target.classList.contains('fa-minus-square')) { // if delete
+          this.props.deleteList(this.props.list._id);
+        } else if (e.target.classList.contains('fa-pen-square')) { // if edit
+          this.props.editList(this.props.list._id);
+        }
+
+      } else { // click is on todo item
+        if (e.target.classList.contains('fa-minus-square')) {
+          this.deleteItem(e.target.dataset.id);
+        } else if (e.target.classList.contains('fa-pen-square')) {
+          console.log('trying to edit todo item') // remember to setState to editMode: true
+        }
       }
     }
+  }
 
+  handleConfirmListEdit() {
+    this.props.confirmListEdit(this.props.list._id);
   }
 
   render() {
     return (
       <div
-        onClick={this.handleClick}
+        onClick={this.props.editMode ? null : this.handleClick}
         className='List'
         id={this.props.list._id}
       >
@@ -103,8 +118,36 @@ class List extends React.Component {
           onChange={this.handleTextareaChange}
         ></textarea>
         <button>Add</button>
-        <h3>{this.props.list.name} <i className="far fa-minus-square" data-id={this.props.list._id}></i></h3>
-        <p>{this.props.list.description}</p>
+
+
+        {this.props.editMode ?
+          <input
+            type="text"
+            value={this.props.editListName}
+            onChange={this.props.listNameOnChange}
+          /> :
+          <h3>{this.props.list.name}
+            <i className="fas fa-pen-square"></i>
+            <i className="fas fa-minus-square" data-id={this.props.list._id}></i>
+          </h3>
+        }
+
+        {this.props.editMode ?
+          <input
+            value={this.props.editListDescription}
+            onChange={this.props.listDescriptionOnChange}
+          /> :
+          <p>{this.props.list.description}</p>
+        }
+
+        {this.props.editMode ?
+          <button
+            onClick={this.handleConfirmListEdit}
+          >Confirm</button> :
+          null
+        }
+
+
         {this.state.items.map(item =>
           <ListItem
             item={item}

@@ -11,7 +11,8 @@ class ListItem extends React.Component {
         <p>{this.props.item.name}
           <span>{this.props.item.status}</span>
           <span>{this.props.item.due}</span>
-          <i className="far fa-minus-square" data-id={this.props.item._id}></i>
+          <i className="fas fa-pen-square"></i>
+          <i className="fas fa-minus-square" data-id={this.props.item._id}></i>
         </p>
         <p>{this.props.item.notes}</p>
       </div>

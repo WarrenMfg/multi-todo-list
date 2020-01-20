@@ -6,10 +6,17 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      lists: []
+      lists: [],
+      editMode: false,
+      editListName: '',
+      editListDescription: ''
     };
     this.addList = this.addList.bind(this);
     this.deleteList = this.deleteList.bind(this);
+    this.editList = this.editList.bind(this);
+    this.listNameOnChange = this.listNameOnChange.bind(this);
+    this.listDescriptionOnChange = this.listDescriptionOnChange.bind(this);
+    this.confirmListEdit = this.confirmListEdit.bind(this);
   }
 
   componentDidMount() {
@@ -50,11 +57,59 @@ class App extends React.Component {
       .catch(err => console.log('error at List.jsx deleteItem', err));
   }
 
+  editList(id) {
+    let filtered = this.state.lists.filter(el => el._id === id);
+    console.log(filtered);
+    this.setState({editMode: true, editListName: filtered[0].name, editListDescription: filtered[0].description});
+  }
+
+  listNameOnChange(e) {
+    this.setState({editListName: e.target.value});
+  }
+
+  listDescriptionOnChange(e) {
+    this.setState({editListDescription: e.target.value})
+  }
+
+  confirmListEdit(id) {
+    this.setState({editMode: false});
+    this.updateList(id);
+  }
+
+
+  updateList(id) {
+    fetch(`http://127.0.0.1:4321/list/one/${id}`,
+      {
+        method: 'PUT',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({
+          "name": this.state.editListName,
+          "description": this.state.editListDescription})
+      }
+    )
+      .then(data => data.json())
+      .then(data => {
+        this.setState(prevState => {
+          let i = prevState.lists.findIndex(el => el._id === id);
+          prevState.lists.splice(i, 1, data);
+          return {lists: prevState.lists, editListName: '', editListDescription: ''};
+        });
+      })
+      .catch(err => console.log('error at App.jsx updateList', err));
+  }
+
   render() {
     return (
       <div>
         <Form addList={this.addList} />
         <AllLists
+          editMode={this.state.editMode}
+          editListName={this.state.editListName}
+          listNameOnChange={this.listNameOnChange}
+          editListDescription={this.state.editListDescription}
+          listDescriptionOnChange={this.listDescriptionOnChange}
+          editList={this.editList}
+          confirmListEdit={this.confirmListEdit}
           deleteList={this.deleteList}
           lists={this.state.lists}
         />
