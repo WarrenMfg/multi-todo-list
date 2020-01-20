@@ -1,4 +1,5 @@
 import React from 'react';
+import List from './List.jsx';
 
 class AllLists extends React.Component {
   constructor(props) {
@@ -8,7 +9,11 @@ class AllLists extends React.Component {
   render() {
     return (
       <div>
-        {this.props.lists.map(list => <List key={list._id} />)}
+        {this.props.lists.map(list =>
+          <List
+            list={list}
+            key={list._id}
+          />)}
       </div>
     );
   }
