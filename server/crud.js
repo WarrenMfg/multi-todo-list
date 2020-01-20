@@ -37,8 +37,6 @@ const getMany = model => (req, res) => {
 
 // GOOD
 const createOne = model => (req, res) => {
-  console.log(req.body);
-  // res.send(200);
   return model.create(req.body)
     .then(doc => res.send(doc))
     .catch(err => {

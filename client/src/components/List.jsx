@@ -24,14 +24,14 @@ class List extends React.Component {
 
   addItem() {
     fetch(`http://127.0.0.1:4321/item/one/${this.props.list._id}`,
-      {
-        method: 'POST',
-        headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({
-          "name": this.state.name,
-          "notes": this.state.notes,
-          "list": this.props.list._id})
-      })
+    {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        "name": this.state.name,
+        "notes": this.state.notes,
+        "list": this.props.list._id})
+    })
       .then(data => data.json())
       .then(data => {
         this.setState(prevState => {
@@ -40,6 +40,19 @@ class List extends React.Component {
         })
       })
       .catch(err => console.log('error at List.jsx addItem', err));
+  }
+
+  deleteItem(id) {
+    fetch(`http://127.0.0.1:4321/item/one/${id}`, {
+      method: 'DELETE',
+      headers: {'Content-Type':'application/json'}
+    })
+      .then(data => data.json())
+      .then(data => this.setState(prevState => {
+        let filtered = prevState.items.filter(el => el._id !== data._id);
+        return {items: filtered};
+      }))
+      .catch(err => console.log('error at List.jsx deleteItem', err));
   }
 
   handleInputChange(e) {
@@ -56,15 +69,19 @@ class List extends React.Component {
     }
   }
 
-  handleClick() {
-    if (this.state.name) {
+  handleClick(e) {
+    if (e.target.tagName === 'BUTTON') {
       this.addItem();
+    } else if (e.target.tagName === 'I') {
+      this.deleteItem(e.target.dataset.id);
     }
+
   }
 
   render() {
     return (
       <div
+        onClick={this.handleClick}
         className='List'
         id={this.props.list._id}
       >
@@ -81,9 +98,7 @@ class List extends React.Component {
           value={this.state.notes}
           onChange={this.handleTextareaChange}
         ></textarea>
-        <button
-          onClick={this.handleClick}
-        >Add</button>
+        <button>Add</button>
         <h3>{this.props.list.name}</h3>
         <p>{this.props.list.description}</p>
         {this.state.items.map(item =>
