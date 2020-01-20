@@ -36,9 +36,10 @@ class List extends React.Component {
       .then(data => {
         this.setState(prevState => {
           prevState.items.push(data);
-          return {items: prevState.items};
+          return {items: prevState.items, name: '', notes: ''};
         })
-      });
+      })
+      .catch(err => console.log('error at List.jsx addItem', err));
   }
 
   handleInputChange(e) {
