@@ -85,10 +85,10 @@ body {
 
 /* ALLLISTS */
 .AllLists {
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   margin: 0 3vw;
   padding: 3vw 3vw 0;
   background-color: white;
@@ -97,19 +97,15 @@ body {
 
 /* LIST */
 .List {
-  width: 42.5vw;
-  height: 42.5vw;
+  width: 27.33vw;
+  height: 40vw;
   margin-bottom: 3vw;
   border-radius: 25px;
   box-shadow: 0 0 10px black;
 }
 
-.List:nth-child(odd) {
-  margin-right: 1.5vw;
-}
-
-.List:nth-child(even) {
-  margin-left: 1.5vw;
+.List:nth-child(3n+2) {
+  margin: 0 3vw 0;
 }
 
 
@@ -227,7 +223,7 @@ body {
 /* LISTITEM */
 .ListItem-container {
   padding: 1.5vw 3vw 0;
-  height: 75%;
+  height: 67%;
   overflow-y: scroll;
 }
 
