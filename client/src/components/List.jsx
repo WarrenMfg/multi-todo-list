@@ -149,6 +149,7 @@ class List extends React.Component {
         });
       })
       .catch(err => console.log('error at List.jsx handleConfirmItemEdit', err));
+    this.props.toggleGlobalEditMode();
   }
 
 
@@ -164,6 +165,7 @@ class List extends React.Component {
         <div className="List-name-and-form">
           {this.state.listEditMode ?
             <input
+              className="List-edit-name"
               type="text"
               value={this.props.editListName}
               onChange={this.props.listNameOnChange}
@@ -176,6 +178,7 @@ class List extends React.Component {
 
           {this.state.listEditMode ?
             <input
+              className="List-edit-description"
               value={this.props.editListDescription}
               onChange={this.props.listDescriptionOnChange}
             /> :
@@ -206,7 +209,7 @@ class List extends React.Component {
           <button>Add</button>
         </div>
 
-
+        <div className="ListItem-container">
           {this.state.items.map(item =>
             <ListItem
               item={item}
@@ -219,6 +222,7 @@ class List extends React.Component {
               key={item._id}
             />
           )}
+        </div>
       </div>
     );
   }

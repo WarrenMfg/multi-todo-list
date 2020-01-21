@@ -7,7 +7,7 @@ class ListItem extends React.Component {
 
   render() {
     return (
-      <div id={this.props.item._id}>
+      <div className="ListItem" id={this.props.item._id}>
 
         {this.props.itemEditMode === this.props.item._id ?
           <input
