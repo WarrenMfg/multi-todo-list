@@ -56,7 +56,7 @@ const removeOne = model => (req, res) => {
 };
 
 const removeMany = model => (req, res) => {
-  return model.remove({ list: req.params.id })
+  return model.deleteMany({ list: req.params.id })
     .then(removed => res.send(removed))
     .catch(err => {
       console.log('error at crud.js removeOne', err);

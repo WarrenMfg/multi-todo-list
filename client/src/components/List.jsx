@@ -7,19 +7,19 @@ class List extends React.Component {
     this.state = {
       items: [],
       name: '',
-      notes: '',
+      // notes: '',
       listEditMode: false,
       itemEditMode: false,
-      editItemName: '',
-      editItemNotes: ''
+      editItemName: '' //,
+      // editItemNotes: ''
     };
     this.handleInputChange = this.handleInputChange.bind(this);
-    this.handleTextareaChange = this.handleTextareaChange.bind(this);
+    // this.handleTextareaChange = this.handleTextareaChange.bind(this);
     this.handleEnter = this.handleEnter.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.handleConfirmListEdit = this.handleConfirmListEdit.bind(this);
     this.handleItemNameChange = this.handleItemNameChange.bind(this);
-    this.handleItemNotesChange = this.handleItemNotesChange.bind(this);
+    // this.handleItemNotesChange = this.handleItemNotesChange.bind(this);
     this.handleConfirmItemEdit = this.handleConfirmItemEdit.bind(this);
   }
 
@@ -37,14 +37,14 @@ class List extends React.Component {
       headers: {'Content-Type':'application/json'},
       body: JSON.stringify({
         "name": this.state.name,
-        "notes": this.state.notes,
+        // "notes": this.state.notes,
         "list": this.props.list._id})
     })
       .then(data => data.json())
       .then(data => {
         this.setState(prevState => {
           prevState.items.push(data);
-          return {items: prevState.items, name: '', notes: ''};
+          return {items: prevState.items, name: '' /*, notes: ''*/};
         })
       })
       .catch(err => console.log('error at List.jsx addItem', err));
@@ -67,9 +67,9 @@ class List extends React.Component {
     this.setState({name: e.target.value});
   }
 
-  handleTextareaChange(e) {
-    this.setState({notes: e.target.value});
-  }
+  // handleTextareaChange(e) {
+  //   this.setState({notes: e.target.value});
+  // }
 
   handleEnter(e) {
     if (e.key === 'Enter' && this.state.name) {
@@ -78,8 +78,9 @@ class List extends React.Component {
   }
 
   handleClick(e) {
-    if (e.target.tagName === 'BUTTON') {
+    if (e.target.tagName === 'BUTTON' && this.state.name) {
       this.addItem();
+      e.target.blur();
 
     } else if (e.target.tagName === 'I') {
 
@@ -87,22 +88,29 @@ class List extends React.Component {
         if (e.target.classList.contains('fa-minus-square')) { // if delete
           this.props.deleteList(this.props.list._id);
         } else if (e.target.classList.contains('fa-pen-square')) { // if edit
-          this.setState({listEditMode: true});
-          this.props.editList(this.props.list._id);
+          if (!this.props.globalEditMode) { // if not in edit mode
+            this.props.toggleGlobalEditMode();
+            this.setState({listEditMode: true});
+            this.props.editList(this.props.list._id);
+          }
         }
 
       } else { // click is on todo item
         if (e.target.classList.contains('fa-minus-square')) {
           this.deleteItem(e.target.dataset.id);
         } else if (e.target.classList.contains('fa-pen-square')) {
-          let filtered = this.state.items.filter(el => el._id === e.target.dataset.id);
-          this.setState({itemEditMode: e.target.dataset.id, editItemName: filtered[0].name, editItemNotes: filtered[0].notes});
+          if (!this.props.globalEditMode) { // if not in edit mode
+            this.props.toggleGlobalEditMode();
+            let filtered = this.state.items.filter(el => el._id === e.target.dataset.id);
+            this.setState({itemEditMode: e.target.dataset.id, editItemName: filtered[0].name /*, editItemNotes: filtered[0].notes*/ });
+          }
         }
       }
     }
   }
 
   handleConfirmListEdit() {
+    this.props.toggleGlobalEditMode();
     this.setState({listEditMode: false});
     this.props.updateList(this.props.list._id);
   }
@@ -111,9 +119,9 @@ class List extends React.Component {
     this.setState({editItemName: e.target.value});
   }
 
-  handleItemNotesChange(e) {
-    this.setState({editItemNotes: e.target.value});
-  }
+  // handleItemNotesChange(e) {
+  //   this.setState({editItemNotes: e.target.value});
+  // }
 
   handleConfirmItemEdit() {
     let id = this.state.itemEditMode;
@@ -123,8 +131,8 @@ class List extends React.Component {
         method: 'PUT',
         headers: {'Content-Type':'application/json'},
         body: JSON.stringify({
-          "name": this.state.editItemName,
-          "notes": this.state.editItemNotes})
+          "name": this.state.editItemName //,
+          /* "notes": this.state.editItemNotes*/ })
       }
     )
       .then(data => data.json())
@@ -135,8 +143,8 @@ class List extends React.Component {
           return {
             items: prevState.items,
             itemEditMode: false,
-            editItemName: '',
-            editItemNotes: ''
+            editItemName: '' //,
+            // editItemNotes: ''
           }
         });
       })
@@ -149,66 +157,68 @@ class List extends React.Component {
   render() {
     return (
       <div
-        onClick={this.state.listEditMode || this.state.itemEditMode ? null : this.handleClick}
+        onClick={this.props.globalEditMode ? null : this.handleClick}
         className='List'
         id={this.props.list._id}
       >
-        <input
-          type="text"
-          placeholder="Todo"
-          value={this.state.name}
-          onChange={this.handleInputChange}
-          onKeyPress={this.handleEnter}
-          required
-        />
-        <textarea
-          placeholder="Notes"
-          value={this.state.notes}
-          onChange={this.handleTextareaChange}
-        ></textarea>
-        <button>Add</button>
+        <div className="List-name-and-form">
+          {this.state.listEditMode ?
+            <input
+              type="text"
+              value={this.props.editListName}
+              onChange={this.props.listNameOnChange}
+            /> :
+            <h3>{this.props.list.name}
+              <i className="fas fa-pen-square"></i>
+              <i className="fas fa-minus-square"></i>
+            </h3>
+            }
 
+          {this.state.listEditMode ?
+            <input
+              value={this.props.editListDescription}
+              onChange={this.props.listDescriptionOnChange}
+            /> :
+            <p>{this.props.list.description}</p>
+          }
 
-        {this.state.listEditMode ?
+          {this.state.listEditMode ?
+            <button
+              onClick={this.handleConfirmListEdit}
+            >Confirm</button> :
+            null
+          }
+        </div>
+        <div className="List-add-todo">
           <input
             type="text"
-            value={this.props.editListName}
-            onChange={this.props.listNameOnChange}
-          /> :
-          <h3>{this.props.list.name}
-            <i className="fas fa-pen-square"></i>
-            <i className="fas fa-minus-square"></i>
-          </h3>
-        }
-
-        {this.state.listEditMode ?
-          <input
-            value={this.props.editListDescription}
-            onChange={this.props.listDescriptionOnChange}
-          /> :
-          <p>{this.props.list.description}</p>
-        }
-
-        {this.state.listEditMode ?
-          <button
-            onClick={this.handleConfirmListEdit}
-          >Confirm</button> :
-          null
-        }
-
-
-        {this.state.items.map(item =>
-          <ListItem
-            item={item}
-            itemEditMode={this.state.itemEditMode}
-            editItemName={this.state.editItemName}
-            handleItemNameChange={this.handleItemNameChange}
-            editItemNotes={this.state.editItemNotes}
-            handleItemNotesChange={this.handleItemNotesChange}
-            handleConfirmItemEdit={this.handleConfirmItemEdit}
-            key={item._id}
+            placeholder="Todo"
+            value={this.state.name}
+            onChange={this.handleInputChange}
+            onKeyPress={this.handleEnter}
+            required
           />
-        )}
+          {/* <textarea
+            placeholder="Notes"
+            value={this.state.notes}
+            onChange={this.handleTextareaChange}
+          ></textarea> */}
+          <button>Add</button>
+        </div>
+
+
+          {this.state.items.map(item =>
+            <ListItem
+              item={item}
+              itemEditMode={this.state.itemEditMode}
+              editItemName={this.state.editItemName}
+              handleItemNameChange={this.handleItemNameChange}
+              // editItemNotes={this.state.editItemNotes}
+              // handleItemNotesChange={this.handleItemNotesChange}
+              handleConfirmItemEdit={this.handleConfirmItemEdit}
+              key={item._id}
+            />
+          )}
       </div>
     );
   }

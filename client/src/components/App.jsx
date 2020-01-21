@@ -8,7 +8,8 @@ class App extends React.Component {
     this.state = {
       lists: [],
       editListName: '',
-      editListDescription: ''
+      editListDescription: '',
+      globalEditMode: false
     };
     this.addList = this.addList.bind(this);
     this.deleteList = this.deleteList.bind(this);
@@ -16,6 +17,7 @@ class App extends React.Component {
     this.listNameOnChange = this.listNameOnChange.bind(this);
     this.listDescriptionOnChange = this.listDescriptionOnChange.bind(this);
     this.updateList = this.updateList.bind(this);
+    this.toggleGlobalEditMode = this.toggleGlobalEditMode.bind(this);
   }
 
   componentDidMount() {
@@ -23,6 +25,12 @@ class App extends React.Component {
       .then(data => data.json())
       .then(data => this.setState({lists: data}))
       .catch(err => console.log('error at App.jsx componentDidMount', err));
+  }
+
+  toggleGlobalEditMode() {
+    this.setState(prevState => {
+      return {globalEditMode: !prevState.globalEditMode};
+    });
   }
 
   addList(list) {
@@ -95,9 +103,11 @@ class App extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className="App">
         <Form addList={this.addList} />
         <AllLists
+          toggleGlobalEditMode={this.toggleGlobalEditMode}
+          globalEditMode={this.state.globalEditMode}
           editListName={this.state.editListName}
           listNameOnChange={this.listNameOnChange}
           editListDescription={this.state.editListDescription}

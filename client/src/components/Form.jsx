@@ -22,26 +22,29 @@ class Form extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
+    if (this.state.name && this.state.description) {
 
-    fetch(`http://127.0.0.1:4321/list/one/add`,
-    {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({
-        "name": this.state.name,
-        "description": this.state.description})
-    })
-      .then(data => data.json())
-      .then(data => {
-        this.setState({name: '', description: ''})
-        this.props.addList(data)
+      fetch(`http://127.0.0.1:4321/list/one/add`,
+      {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({
+          "name": this.state.name,
+          "description": this.state.description})
       })
-      .catch(err => console.log('error at Form.jsx handleSubmit', err));
+        .then(data => data.json())
+        .then(data => {
+          this.setState({name: '', description: ''})
+          this.props.addList(data);
+        })
+        .catch(err => console.log('error at Form.jsx handleSubmit', err));
+    }
+    e.target.blur();
   }
 
   render() {
     return (
-      <form>
+      <form className="Form">
         <input
           type="text"
           placeholder="New list name"

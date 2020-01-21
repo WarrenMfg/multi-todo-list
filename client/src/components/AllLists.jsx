@@ -8,9 +8,11 @@ class AllLists extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className="AllLists">
         {this.props.lists.map(list =>
           <List
+            toggleGlobalEditMode={this.props.toggleGlobalEditMode}
+            globalEditMode={this.props.globalEditMode}
             list={list}
             editListName={this.props.editListName}
             listNameOnChange={this.props.listNameOnChange}

@@ -1,0 +1,180 @@
+/* GLOBAL */
+:root {
+  --red: #DA1920;
+  --orange: #FC9146;
+  --yellow: #F7C72A;
+  --green: #8FC855;
+  --blue: #058DB5;
+}
+
+* {
+  outline: none;
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+html {
+  background-color: var(--yellow);
+}
+
+body {
+  margin: 0;
+}
+
+
+/* APP */
+.App {
+  background-color: var(--blue);
+  min-height: 100vh;
+}
+
+
+/* FORM */
+.Form {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  background-color: black;
+  padding: 50px;
+}
+
+.Form input {
+  box-sizing: content-box;
+  font-size: 16px;
+  padding: 10px 10px 10px 15px;
+  border-top: 0px solid var(--blue);
+  border-right: 0px solid var(--blue);
+  border-bottom: 4px solid var(--blue);
+  border-left: 0px solid var(--blue);
+  border-radius: 50px;
+  transition: all 0.2s ease;
+}
+
+.Form input:hover, .Form input:focus {
+  border-top: 0px solid var(--green);
+  border-right: 0px solid var(--green);
+  border-bottom: 4px solid var(--green);
+  border-left: 0px solid var(--green);
+}
+
+.Form button {
+  background-color: var(--blue);
+  border: none;
+  border-radius: 50px;
+  width: 111px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.Form button:hover, .Form button:focus {
+  background-color: var(--green);
+}
+
+
+/* ALLLISTS */
+.AllLists {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin: 0 3vw;
+  padding: 3vw 3vw 0;
+  background-color: white;
+}
+
+
+/* LIST */
+.List {
+  width: 42.5vw;
+  height: 42.5vw;
+  overflow-y: scroll;
+  margin-bottom: 3vw;
+  border-radius: 25px;
+  box-shadow: 0 0 10px black;
+}
+
+.List:nth-child(odd) {
+  margin-right: 1.5vw;
+}
+
+.List:nth-child(even) {
+  margin-left: 1.5vw;
+}
+
+.List-name-and-form {
+  padding: 1.5vw 3vw 0;
+  text-align: center;
+  background-color: var(--yellow);
+}
+
+.List-name-and-form h3, .List-name-and-form p {
+  margin: 0;
+}
+
+.List-add-todo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--yellow);
+  padding: 1.5vw;
+}
+
+.List-add-todo input {
+  width: 50%;
+  font-size: 16px;
+  padding: 7px 7px 7px 12px;
+  box-sizing: content-box;
+  border-radius: 50px;
+  border-top: 0px solid var(--blue);
+  border-right: 0px solid var(--blue);
+  border-bottom: 4px solid var(--blue);
+  border-left: 0px solid var(--blue);
+  transition: all 0.2s ease;
+}
+
+.List-add-todo input:hover, .List-add-todo input:focus {
+  border-top: 0px solid var(--green);
+  border-right: 0px solid var(--green);
+  border-bottom: 4px solid var(--green);
+  border-left: 0px solid var(--green);
+}
+
+/* .List-add-todo textarea {
+  grid-area: notes;
+  font-size: 12px;
+  resize: none;
+  padding: 7px 7px 7px 12px;
+  box-sizing: content-box;
+  border-radius: 50px;
+  border-top: 0px solid var(--blue);
+  border-right: 0px solid var(--blue);
+  border-bottom: 4px solid var(--blue);
+  border-left: 0px solid var(--blue);
+  transition: all 0.2s ease;
+}
+
+.List-add-todo textarea:focus {
+  border-top: 0px solid var(--green);
+  border-right: 0px solid var(--green);
+  border-bottom: 4px solid var(--green);
+  border-left: 0px solid var(--green);
+} */
+
+.List-add-todo button {
+  background-color: var(--blue);
+  border: none;
+  border-radius: 50px;
+  width: 25%;
+  height: 100%;
+  padding: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+
+.List-add-todo button:hover, .List-add-todo button:focus {
+  background-color: var(--green);
+}
