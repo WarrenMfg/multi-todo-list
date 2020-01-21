@@ -7,19 +7,15 @@ class List extends React.Component {
     this.state = {
       items: [],
       name: '',
-      // notes: '',
       listEditMode: false,
       itemEditMode: false,
-      editItemName: '' //,
-      // editItemNotes: ''
+      editItemName: ''
     };
     this.handleInputChange = this.handleInputChange.bind(this);
-    // this.handleTextareaChange = this.handleTextareaChange.bind(this);
     this.handleEnter = this.handleEnter.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.handleConfirmListEdit = this.handleConfirmListEdit.bind(this);
     this.handleItemNameChange = this.handleItemNameChange.bind(this);
-    // this.handleItemNotesChange = this.handleItemNotesChange.bind(this);
     this.handleConfirmItemEdit = this.handleConfirmItemEdit.bind(this);
   }
 
@@ -37,14 +33,13 @@ class List extends React.Component {
       headers: {'Content-Type':'application/json'},
       body: JSON.stringify({
         "name": this.state.name,
-        // "notes": this.state.notes,
         "list": this.props.list._id})
     })
       .then(data => data.json())
       .then(data => {
         this.setState(prevState => {
           prevState.items.push(data);
-          return {items: prevState.items, name: '' /*, notes: ''*/};
+          return {items: prevState.items, name: ''};
         })
       })
       .catch(err => console.log('error at List.jsx addItem', err));
@@ -66,10 +61,6 @@ class List extends React.Component {
   handleInputChange(e) {
     this.setState({name: e.target.value});
   }
-
-  // handleTextareaChange(e) {
-  //   this.setState({notes: e.target.value});
-  // }
 
   handleEnter(e) {
     if (e.key === 'Enter' && this.state.name) {
@@ -102,7 +93,7 @@ class List extends React.Component {
           if (!this.props.globalEditMode) { // if not in edit mode
             this.props.toggleGlobalEditMode();
             let filtered = this.state.items.filter(el => el._id === e.target.dataset.id);
-            this.setState({itemEditMode: e.target.dataset.id, editItemName: filtered[0].name /*, editItemNotes: filtered[0].notes*/ });
+            this.setState({itemEditMode: e.target.dataset.id, editItemName: filtered[0].name});
           }
         }
       }
@@ -110,18 +101,16 @@ class List extends React.Component {
   }
 
   handleConfirmListEdit() {
-    this.props.toggleGlobalEditMode();
-    this.setState({listEditMode: false});
-    this.props.updateList(this.props.list._id);
+    if (this.props.editListName && this.props.editListDescription) {
+      this.props.toggleGlobalEditMode();
+      this.setState({listEditMode: false});
+      this.props.updateList(this.props.list._id);
+    }
   }
 
   handleItemNameChange(e) {
     this.setState({editItemName: e.target.value});
   }
-
-  // handleItemNotesChange(e) {
-  //   this.setState({editItemNotes: e.target.value});
-  // }
 
   handleConfirmItemEdit() {
     let id = this.state.itemEditMode;
@@ -131,8 +120,8 @@ class List extends React.Component {
         method: 'PUT',
         headers: {'Content-Type':'application/json'},
         body: JSON.stringify({
-          "name": this.state.editItemName //,
-          /* "notes": this.state.editItemNotes*/ })
+          "name": this.state.editItemName
+        })
       }
     )
       .then(data => data.json())
@@ -143,8 +132,7 @@ class List extends React.Component {
           return {
             items: prevState.items,
             itemEditMode: false,
-            editItemName: '' //,
-            // editItemNotes: ''
+            editItemName: ''
           }
         });
       })
@@ -201,27 +189,22 @@ class List extends React.Component {
             onKeyPress={this.handleEnter}
             required
           />
-          {/* <textarea
-            placeholder="Notes"
-            value={this.state.notes}
-            onChange={this.handleTextareaChange}
-          ></textarea> */}
           <button>Add</button>
         </div>
 
         <div className="ListItem-container">
-          {this.state.items.map(item =>
-            <ListItem
-              item={item}
-              itemEditMode={this.state.itemEditMode}
-              editItemName={this.state.editItemName}
-              handleItemNameChange={this.handleItemNameChange}
-              // editItemNotes={this.state.editItemNotes}
-              // handleItemNotesChange={this.handleItemNotesChange}
-              handleConfirmItemEdit={this.handleConfirmItemEdit}
-              key={item._id}
-            />
-          )}
+          <div>
+            {this.state.items.map(item =>
+              <ListItem
+                item={item}
+                itemEditMode={this.state.itemEditMode}
+                editItemName={this.state.editItemName}
+                handleItemNameChange={this.handleItemNameChange}
+                handleConfirmItemEdit={this.handleConfirmItemEdit}
+                key={item._id}
+              />
+            )}
+          </div>
         </div>
       </div>
     );

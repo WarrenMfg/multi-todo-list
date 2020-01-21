@@ -26,6 +26,16 @@ body {
 .App {
   background-color: var(--blue);
   min-height: 100vh;
+
+}
+
+.App-no-lists {
+  height: 100vh;
+  padding: 142px;
+  margin: 0 3vw;
+  background-color: white;
+  font-size: xx-large;
+  text-align: center;
 }
 
 
@@ -75,6 +85,7 @@ body {
 
 /* ALLLISTS */
 .AllLists {
+  height: 100vh;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
@@ -88,7 +99,6 @@ body {
 .List {
   width: 42.5vw;
   height: 42.5vw;
-  overflow-y: scroll;
   margin-bottom: 3vw;
   border-radius: 25px;
   box-shadow: 0 0 10px black;
@@ -106,6 +116,7 @@ body {
 
 /* LIST NAME / FORM */
 .List-name-and-form {
+  border-radius: 25px 25px 0 0;
   padding: 1.5vw 3vw 0;
   text-align: center;
   background-color: var(--yellow);
@@ -113,6 +124,15 @@ body {
 
 .List-name-and-form i {
   margin-left: 5px;
+  cursor: pointer;
+}
+
+.List-name-and-form i:first-of-type {
+  color: var(--blue);
+}
+
+.List-name-and-form i:last-of-type {
+  color: var(--red);
 }
 
 .List-name-and-form h3, .List-name-and-form p {
@@ -186,27 +206,6 @@ body {
   border-left: 0px solid var(--green);
 }
 
-/* .List-add-todo textarea {
-  grid-area: notes;
-  font-size: 12px;
-  resize: none;
-  padding: 7px 7px 7px 12px;
-  box-sizing: content-box;
-  border-radius: 50px;
-  border-top: 0px solid var(--blue);
-  border-right: 0px solid var(--blue);
-  border-bottom: 4px solid var(--blue);
-  border-left: 0px solid var(--blue);
-  transition: all 0.2s ease;
-}
-
-.List-add-todo textarea:focus {
-  border-top: 0px solid var(--green);
-  border-right: 0px solid var(--green);
-  border-bottom: 4px solid var(--green);
-  border-left: 0px solid var(--green);
-} */
-
 .List-add-todo button {
   background-color: var(--blue);
   border: none;
@@ -228,7 +227,8 @@ body {
 /* LISTITEM */
 .ListItem-container {
   padding: 1.5vw 3vw 0;
-
+  height: 75%;
+  overflow-y: scroll;
 }
 
 .ListItem p {
@@ -237,6 +237,15 @@ body {
 
 .ListItem i {
   margin-left: 5px;
+  cursor: pointer;
+}
+
+.ListItem i:first-of-type {
+  color: var(--blue);
+}
+
+.ListItem i:last-of-type {
+  color: var(--red);
 }
 
 .ListItem input {

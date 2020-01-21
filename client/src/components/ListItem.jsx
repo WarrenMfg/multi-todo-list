@@ -21,17 +21,6 @@ class ListItem extends React.Component {
           </p>
         }
 
-
-        {/* {this.props.itemEditMode === this.props.item._id ?
-          <textarea
-            type="text"
-            value={this.props.editItemNotes}
-            onChange={this.props.handleItemNotesChange}
-          ></textarea> :
-          <p>{this.props.item.notes}</p>
-        } */}
-
-
         {this.props.itemEditMode === this.props.item._id ?
           <button
             onClick={this.props.handleConfirmItemEdit}

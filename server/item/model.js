@@ -9,17 +9,6 @@ const itemSchema = new mongoose.Schema(
       trim: true,
       maxlength: 50
     },
-    status: {
-      type: String,
-      required: true,
-      enum: ['active', 'complete', 'pastdue'],
-      default: 'active'
-    },
-    notes: String,
-    due: {
-      type: Date,
-      default: Date.now
-    },
     list: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'list',

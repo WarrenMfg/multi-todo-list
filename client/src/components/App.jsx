@@ -105,18 +105,22 @@ class App extends React.Component {
     return (
       <div className="App">
         <Form addList={this.addList} />
-        <AllLists
-          toggleGlobalEditMode={this.toggleGlobalEditMode}
-          globalEditMode={this.state.globalEditMode}
-          editListName={this.state.editListName}
-          listNameOnChange={this.listNameOnChange}
-          editListDescription={this.state.editListDescription}
-          listDescriptionOnChange={this.listDescriptionOnChange}
-          editList={this.editList}
-          updateList={this.updateList}
-          deleteList={this.deleteList}
-          lists={this.state.lists}
-        />
+
+        {this.state.lists.length ?
+          <AllLists
+            toggleGlobalEditMode={this.toggleGlobalEditMode}
+            globalEditMode={this.state.globalEditMode}
+            editListName={this.state.editListName}
+            listNameOnChange={this.listNameOnChange}
+            editListDescription={this.state.editListDescription}
+            listDescriptionOnChange={this.listDescriptionOnChange}
+            editList={this.editList}
+            updateList={this.updateList}
+            deleteList={this.deleteList}
+            lists={this.state.lists}
+          /> :
+          <div className="App-no-lists"><h1>Add some<br/>todo lists!</h1></div>
+        }
       </div>
     );
   }
