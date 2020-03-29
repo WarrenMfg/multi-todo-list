@@ -24,7 +24,7 @@ class Form extends React.Component {
     e.preventDefault();
     if (this.state.name && this.state.description) {
 
-      fetch(`http://127.0.0.1:4321/list/one/add`,
+      fetch(`/list/one/add`,
       {
         method: 'POST',
         headers: {'Content-Type':'application/json'},

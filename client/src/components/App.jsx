@@ -21,7 +21,7 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    fetch('http://127.0.0.1:4321/list/many/all')
+    fetch('/list/many/all')
       .then(data => data.json())
       .then(data => this.setState({lists: data}))
       .catch(err => console.log('error at App.jsx componentDidMount', err));
@@ -41,7 +41,7 @@ class App extends React.Component {
   }
 
   deleteList(id) {
-    fetch(`http://127.0.0.1:4321/list/one/${id}`, {
+    fetch(`/list/one/${id}`, {
       method: 'DELETE',
       headers: {'Content-Type':'application/json'}
     })
@@ -52,7 +52,7 @@ class App extends React.Component {
       }))
       // delete associated todos from list
       .then(() => {
-        fetch(`http://127.0.0.1:4321/item/many/${id}`,
+        fetch(`/item/many/${id}`,
           {
             method: 'DELETE',
             headers: {'Content-Type':'application/json'}
@@ -78,7 +78,7 @@ class App extends React.Component {
   }
 
   updateList(id) {
-    fetch(`http://127.0.0.1:4321/list/one/${id}`,
+    fetch(`/list/one/${id}`,
       {
         method: 'PUT',
         headers: {'Content-Type':'application/json'},

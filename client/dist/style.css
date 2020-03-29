@@ -30,7 +30,7 @@ body {
 }
 
 .App-no-lists {
-  height: 100vh;
+  height: calc(100vh - 142px);
   padding: 142px;
   margin: 0 3vw;
   background-color: white;

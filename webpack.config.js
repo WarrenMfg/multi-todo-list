@@ -6,7 +6,7 @@ module.exports = {
     path: path.resolve(__dirname, 'client/dist'),
     filename: 'bundle.js'
   },
-  mode: 'development', // does this need to be switched before deployment
+  mode: 'development',
   watch: true,
   module: {
     rules: [
@@ -14,7 +14,7 @@ module.exports = {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         use: {
-          loader: 'babel-loader', // allows transpiling JavaScript files using Babel and webpack
+          loader: 'babel-loader',
           options: {
             presets: ['@babel/preset-env', '@babel/preset-react']
           }

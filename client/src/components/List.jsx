@@ -20,14 +20,14 @@ class List extends React.Component {
   }
 
   componentDidMount() {
-    fetch(`http://127.0.0.1:4321/item/many/${this.props.list._id}`)
+    fetch(`/item/many/${this.props.list._id}`)
       .then(data => data.json())
       .then(data => this.setState({items: data}))
       .catch(err => console.log('error at List.jsx componentDidMount', err));
   }
 
   addItem() {
-    fetch(`http://127.0.0.1:4321/item/one/${this.props.list._id}`,
+    fetch(`/item/one/${this.props.list._id}`,
     {
       method: 'POST',
       headers: {'Content-Type':'application/json'},
@@ -46,7 +46,7 @@ class List extends React.Component {
   }
 
   deleteItem(id) {
-    fetch(`http://127.0.0.1:4321/item/one/${id}`, {
+    fetch(`/item/one/${id}`, {
       method: 'DELETE',
       headers: {'Content-Type':'application/json'}
     })
@@ -115,7 +115,7 @@ class List extends React.Component {
   handleConfirmItemEdit() {
     let id = this.state.itemEditMode;
 
-    fetch(`http://127.0.0.1:4321/item/one/${id}`,
+    fetch(`/item/one/${id}`,
       {
         method: 'PUT',
         headers: {'Content-Type':'application/json'},
